@@ -1,3 +1,4 @@
+'use strict'
 /* 
 什么是数组? (array)
 
@@ -5,7 +6,7 @@
 
 特点: 顺序存储; 每个元素都有自己的下标;
 
-在内存中也算顺序存储, 是一个个连续的内存单元组成
+在内存中也是顺序存储, 是一个个连续的内存单元组成
 
 */
 
@@ -88,6 +89,67 @@ function insertMiddle() {
 }
 
 Array.prototype.insertMiddle = insertMiddle
-let arr1 = [1, 2, 3]
-arr1.insertMiddle(1, 4, 5)
-console.log(arr1); // [ 1, 4, 5, 2, 3 ]
+// let arr1 = [1, 2, 3]
+// arr1.insertMiddle(1, 4, 5)
+// console.log(arr1); // [ 1, 4, 5, 2, 3 ]
+
+/* 删除元素 */
+/* 删除最后一个 O(1) */
+function myPop() {
+    let len = this.length
+    if (!len) {
+        return undefined
+    }
+    let del = this[len - 1]
+    this.length = len - 1
+    return del
+}
+Array.prototype.myPop = myPop
+// let arr = [1, 2, 3, 4, 5]
+// arr.myPop()
+// console.log(arr);
+
+/* 删除第一个 O(n) */
+function myShift() {
+    let len = this.length
+    if (!len) {
+        return undefined
+    }
+    let del = this[0]
+
+    for (let index = 1; index < len; index++) {
+        this[index - 1] = this[index]
+    }
+    this.length = len - 1
+    return del
+}
+
+Array.prototype.myShift = myShift
+// let arr = [1, 2, 3, 4, 5, 6]
+// arr.myShift()
+// console.log(arr); // [2, 3, 4, 5, 6]
+
+/* 数组 指定位置 删除 n 个 */
+function mySimpleSplice(delIndex, num = 0) {
+    let len = this.length
+    if (!delIndex && delIndex !== 0) return undefined
+    if (!len) return []
+
+    let temp = []
+    for (let index = 0; index < len; index++) {
+        if (delIndex <= index) {
+            if (index + num > len - 1) {
+                break
+            } else {
+                temp.myPush(this[index])
+                this[index] = this[index + num]
+            }
+        }
+    }
+    this.length = len - num <= 0 ? delIndex : len - num + delIndex
+    return temp
+}
+Array.prototype.mySimpleSplice = mySimpleSplice
+let arr = [1, 2, 3, 4, 5, 6]
+console.log(arr.mySimpleSplice(2, 3)); // [ 1, 2, 3 ]
+console.log(arr); // [ 1, 4, 5, 6 ]
